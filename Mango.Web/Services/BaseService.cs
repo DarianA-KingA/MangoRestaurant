@@ -19,7 +19,7 @@ namespace Mango.Web.Services
         {
             try 
             {
-                var client  = httpClient.CreateClient("MnagoAPI");
+                var client  = httpClient.CreateClient("MangoAPI");
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
                 message.RequestUri = new Uri(apiRequest.Url);
