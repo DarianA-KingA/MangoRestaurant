@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//1.add dbContext
+//1.add dbContext for depency injection
 builder.Services.AddDbContext<ApplicationContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//2.add identity
+//2.add identity dependency inject ion
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 var appBuilder = builder.Services.AddIdentityServer(options => {
