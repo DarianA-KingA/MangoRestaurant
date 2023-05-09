@@ -87,10 +87,13 @@ namespace Mango.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProduct(ProductDto model)
         {
-            var response = await _productService.DeleteProductAsync<ResponseDto>(model.ProductId);
-            if (response.IsSuccess)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(ProductIndex));
+                var response = await _productService.DeleteProductAsync<ResponseDto>(model.ProductId);
+                if (response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(ProductIndex));
+                }
             }
             return View(model);
         }
