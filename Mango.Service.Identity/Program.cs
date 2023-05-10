@@ -1,5 +1,6 @@
 using Mango.Service.Identity;
 using Mango.Service.Identity.Context;
+using Mango.Service.Identity.Initializer;
 using Mango.Service.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,9 @@ var appBuilder = builder.Services.AddIdentityServer(options => {
 .AddInMemoryClients(SD.Clients)
 .AddAspNetIdentity<ApplicationUser>();
 
+//3.add seed 
+
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 appBuilder.AddDeveloperSigningCredential();
 
 
@@ -46,9 +50,20 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseIdentityServer();
 app.UseAuthorization();
+SeedDatabase();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+//seed to create roles,claims and default users
+void SeedDatabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
