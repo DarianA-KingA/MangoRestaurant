@@ -43,7 +43,7 @@ namespace Mango.Service.Identity.Services
             if (_userManager.SupportsUserRole)
             {
                 IList<string> roles = await _userManager.GetRolesAsync(user);
-                foreach ( string rolename in roles ) 
+                foreach (string rolename in roles)
                 {
                     claims.Add(new Claim(JwtClaimTypes.Role, rolename));
                     if (_roleManager.SupportsRoleClaims)

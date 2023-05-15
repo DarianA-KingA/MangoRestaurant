@@ -2,26 +2,19 @@
 // See LICENSE in the project root for license information.
 
 
-using IdentityModel;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-using Duende.IdentityServer.Test;
-using Microsoft.AspNetCore.Identity;
-using Mango.Services.Identity.MainModule.Account;
-using System.Collections.Generic;
-using System.Security.Claims;
+using IdentityModel;
 using Mango.Service.Identity.Models;
+using Mango.Services.Identity.MainModule.Account;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -147,8 +140,8 @@ namespace IdentityServerHost.Quickstart.UI
                         throw new Exception("invalid return url");
                     }
                 }
-               
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId:context?.Client.ClientId));
+
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
                 ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
             }
 
@@ -157,7 +150,7 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-        
+
         /// <summary>
         /// Show logout page
         /// </summary>
@@ -226,7 +219,7 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-       
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]

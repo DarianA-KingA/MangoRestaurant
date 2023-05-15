@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mango.Services.ProductAPI.Context
 {
-    public class ApplicationContext: DbContext
+    public class ApplicationContext : DbContext
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext>options):base(options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            
+
         }
         public DbSet<Product> Products { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

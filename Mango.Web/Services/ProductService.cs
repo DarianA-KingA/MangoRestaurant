@@ -6,18 +6,18 @@ namespace Mango.Web.Services
     public class ProductService : BaseService, IProductService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public ProductService(IHttpClientFactory clientFactory):base(clientFactory)
+        public ProductService(IHttpClientFactory clientFactory) : base(clientFactory)
         {
             _httpClientFactory = clientFactory;
         }
         public async Task<T> CreateProductAsync<T>(ProductDto productDto, string token)
         {
-            return await this.SendAsync<T>(new ApiRequest() 
-            { 
+            return await this.SendAsync<T>(new ApiRequest()
+            {
                 ApiType = SD.ApiType.POST,
                 Data = productDto,
-                Url = SD.ProductAPIBase+ "api/products",
-                AccessToken=token
+                Url = SD.ProductAPIBase + "api/products",
+                AccessToken = token
             });
         }
 
@@ -26,7 +26,7 @@ namespace Mango.Web.Services
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = SD.ProductAPIBase + "api/products/"+id,
+                Url = SD.ProductAPIBase + "api/products/" + id,
                 AccessToken = token
             });
         }
