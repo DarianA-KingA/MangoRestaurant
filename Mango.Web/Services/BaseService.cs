@@ -18,9 +18,9 @@ namespace Mango.Web.Services
 
         public async Task<T> SendAsync<T>(ApiRequest apiRequest)
         {
-            try 
+            try
             {
-                var client  = httpClient.CreateClient("MangoAPI");
+                var client = httpClient.CreateClient("MangoAPI");
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
                 message.RequestUri = new Uri(apiRequest.Url);
@@ -28,7 +28,7 @@ namespace Mango.Web.Services
                 if (apiRequest.Data != null)
                 {
                     message.Content = new StringContent(JsonConvert.SerializeObject(apiRequest.Data),
-                        Encoding.UTF8,"application/json");
+                        Encoding.UTF8, "application/json");
                 }
                 if (!string.IsNullOrEmpty(apiRequest.AccessToken))
                 {
@@ -46,7 +46,7 @@ namespace Mango.Web.Services
                     case SD.ApiType.DELETE:
                         message.Method = HttpMethod.Delete;
                         break;
-                    default :
+                    default:
                         message.Method = HttpMethod.Get;
                         break;
                 }
@@ -55,12 +55,12 @@ namespace Mango.Web.Services
                 var apiResponseDto = JsonConvert.DeserializeObject<T>(apiContent);
                 return apiResponseDto;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 var dto = new ResponseDto
                 {
                     DisplayMessage = "Error",
-                    ErrorMessages = new List<string> { Convert.ToString(ex.Message)},
+                    ErrorMessages = new List<string> { Convert.ToString(ex.Message) },
                     IsSuccess = false
                 };
                 var res = JsonConvert.SerializeObject(dto);

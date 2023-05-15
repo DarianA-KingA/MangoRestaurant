@@ -3,7 +3,6 @@ using Mango.Service.Identity.Context;
 using Mango.Service.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Mango.Service.Identity.Initializer
@@ -18,7 +17,7 @@ namespace Mango.Service.Identity.Initializer
         {
             _db = db;
             _userManager = userManager;
-            _roleManager = roleManager; 
+            _roleManager = roleManager;
         }
         public void Initialize()
         {
@@ -58,7 +57,7 @@ namespace Mango.Service.Identity.Initializer
                     FirstName = "admin_name",
                     LastName = "admin_lastname"
                 };
-                _userManager.CreateAsync( adminUser, "Admin123*").GetAwaiter().GetResult();
+                _userManager.CreateAsync(adminUser, "Admin123*").GetAwaiter().GetResult();
                 _userManager.AddToRoleAsync(adminUser, SD.Admin).GetAwaiter().GetResult();
 
                 var claimAdmin = _userManager.AddClaimsAsync(adminUser, new Claim[] {
@@ -71,7 +70,7 @@ namespace Mango.Service.Identity.Initializer
             }
             //create admin user if it not created 
             var customer_user = _userManager.FindByEmailAsync("customer@email.com").GetAwaiter().GetResult();
-            if (customer_user == null) 
+            if (customer_user == null)
             {
                 ApplicationUser customerUser = new()
                 {

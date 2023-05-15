@@ -24,7 +24,8 @@ builder.Services.AddControllers();
 
 //4.adding authentication with json bearer
 builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options => {
+    .AddJwtBearer("Bearer", options =>
+    {
         options.Authority = "https://localhost:7115/";
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -33,7 +34,8 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 //5.adding authorization
-builder.Services.AddAuthorization(options => {
+builder.Services.AddAuthorization(options =>
+{
     options.AddPolicy("ApiScope", policy =>
     {
         policy.RequireAuthenticatedUser();
@@ -43,19 +45,19 @@ builder.Services.AddAuthorization(options => {
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 //6.modigy swaager
-builder.Services.AddSwaggerGen(c => 
+builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme 
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"Enter 'Bearer' [space] and your token",
-        Name ="Authorization",
+        Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearar"
     });
     //6.1 activate security requirement for swagger
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement 
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
              new OpenApiSecurityScheme

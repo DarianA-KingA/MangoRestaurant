@@ -1,5 +1,4 @@
 ﻿using Mango.Services.ProductAPI.Models.DTO;
-using System.Data.SqlTypes;
 
 namespace Mango.Services.ProductAPI.Repository
 {

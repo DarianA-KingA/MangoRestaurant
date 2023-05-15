@@ -16,7 +16,8 @@ builder.Services.AddDbContext<ApplicationContext>(option =>
 //2.add identity dependency inject ion
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
-var appBuilder = builder.Services.AddIdentityServer(options => {
+var appBuilder = builder.Services.AddIdentityServer(options =>
+{
     options.Events.RaiseErrorEvents = true;
     options.Events.RaiseInformationEvents = true;
     options.Events.RaiseFailureEvents = true;

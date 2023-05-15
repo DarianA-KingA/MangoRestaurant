@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 //1.http client to consume api
 builder.Services.AddHttpClient<IProductService, ProductService>();
 //2. define the url from the api
-SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"]; 
+SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
 //3.depency injection for productService
 builder.Services.AddScoped<IProductService, ProductService>();
 
@@ -18,10 +18,11 @@ builder.Services.AddControllersWithViews();
 
 //4.adding authentication
 //note: our information must match with the information of our client in the class Mango.Service.Identity.SD
-builder.Services.AddAuthentication(options => {
+builder.Services.AddAuthentication(options =>
+{
     options.DefaultScheme = "Cookies";
     options.DefaultChallengeScheme = "oidc";
-}).AddCookie("Cookies", c => c.ExpireTimeSpan =TimeSpan.FromMinutes(10))
+}).AddCookie("Cookies", c => c.ExpireTimeSpan = TimeSpan.FromMinutes(10))
 .AddOpenIdConnect("oidc", options =>
 {
     options.Authority = builder.Configuration["ServiceUrls:IdentityAPI"];
