@@ -1,6 +1,7 @@
 ﻿using Mango.Service.ShoppingCartAPI.Models.DTO;
 using Mango.Service.ShoppingCartAPI.Repository;
 using Mango.Services.ShoppingCartAPi.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mango.Service.ShoppingCartAPI.Controllers
@@ -33,8 +34,7 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
             return _response;
         }
         [HttpPost("AddCart")]
-
-        public async Task<object> AddCart([FromBody] CartDto cartDto)
+        public async Task<object> AddCart(CartDto cartDto)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
 
         [HttpPost("UpdateCart")]
 
-        public async Task<object> UpdateCart([FromBody] CartDto cartDto)
+        public async Task<object> UpdateCart(CartDto cartDto)
         {
             try
             {
@@ -84,6 +84,16 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
             }
             return _response;
 
+        }
+
+        [HttpPost("Test")]
+        public object Test(darian model)
+        {
+            return _response;
+        }
+        public class darian
+        {
+            public string nombre { get; set; }
         }
     }
 }
