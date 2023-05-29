@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mango.Web.Models
 {
@@ -9,11 +10,20 @@ namespace Mango.Web.Models
             Count = 1;
         }
         public int ProductId { get; set; }
-        public string? Name { get; set; }
+        [ValidateNever]
+        public string Name { get; set; }
+        [ValidateNever]
+
         public double Price { get; set; }
-        public string? Description { get; set; }
-        public string? ImageUrl { get; set; }
-        public string? CategoryName { get; set; }
+        [ValidateNever]
+
+        public string Description { get; set; }
+        [ValidateNever]
+
+        public string ImageUrl { get; set; }
+        [ValidateNever]
+
+        public string CategoryName { get; set; }
         [Range(1, 100)]
         public int Count { get; set; }
     }

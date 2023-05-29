@@ -49,7 +49,7 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> UpdateProduct(int productId)
         {
             var accesstoken = await HttpContext.GetTokenAsync("access_token");
-            var response = await _productService.GetAllProductByIdAsync<ResponseDto>(productId, accesstoken);
+            var response = await _productService.GetProductByIdAsync<ResponseDto>(productId, accesstoken);
             if (response != null && response.IsSuccess)
             {
                 var test = Convert.ToString(response.Result);
@@ -78,7 +78,7 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> DeleteProduct(int productId)
         {
             var accesstoken = await HttpContext.GetTokenAsync("access_token");
-            var response = await _productService.GetAllProductByIdAsync<ResponseDto>(productId, accesstoken);
+            var response = await _productService.GetProductByIdAsync<ResponseDto>(productId, accesstoken);
             if (response != null && response.IsSuccess)
             {
                 var test = Convert.ToString(response.Result);
