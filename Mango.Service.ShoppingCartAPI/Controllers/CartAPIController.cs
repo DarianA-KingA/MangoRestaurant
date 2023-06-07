@@ -1,4 +1,5 @@
-﻿using Mango.Service.ShoppingCartAPI.Models.DTO;
+﻿using Mango.Service.ShoppingCartAPI.Messages;
+using Mango.Service.ShoppingCartAPI.Models.DTO;
 using Mango.Service.ShoppingCartAPI.Repository;
 using Mango.Services.ShoppingCartAPi.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
@@ -17,8 +18,8 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
             _cartRepository = cartRepository;
             this._response = new ResponseDto();
         }
-        [HttpGet("GetCart/{userId}")]
 
+        [HttpGet("GetCart/{userId}")]
         public async Task<object> GetCart(string userId)
         {
             try
@@ -33,6 +34,7 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
             }
             return _response;
         }
+
         [HttpPost("AddCart")]
         public async Task<object> AddCart(CartDto cartDto)
         {
@@ -50,7 +52,6 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
         }
 
         [HttpPost("UpdateCart")]
-
         public async Task<object> UpdateCart(CartDto cartDto)
         {
             try
@@ -69,7 +70,6 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
         }
 
         [HttpPost("RemoveCart")]
-
         public async Task<object> RemoveCart([FromBody]int cartDetailsId)
         {
             try
@@ -85,8 +85,8 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
             return _response;
 
         }
-        [HttpPost("ApplyCoupon")]
 
+        [HttpPost("ApplyCoupon")]
         public async Task<object> ApplyCoupon([FromBody] CartDto cartDto)
         {
             try
@@ -102,14 +102,36 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
             return _response;
 
         }
-        [HttpPost("RemoveCoupon")]
 
+        [HttpPost("RemoveCoupon")]
         public async Task<object> RemoveCoupon([FromBody] string userId)
         {
             try
             {
                 bool isSuccess = await _cartRepository.Removecoupon(userId);
                 _response.Result = isSuccess;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+
+        }
+
+        [HttpPost("Checkout")]
+        public async Task<object> Checkout(CheckoutHeaderDto checkoutHeader)
+        {
+            try
+            {
+                CartDto cartDto = await _cartRepository.GetCartByUserIdAsync(checkoutHeader.UserId);
+                if (cartDto == null)
+                {
+                    return BadRequest();
+                }
+                checkoutHeader.CartDetails = cartDto.CartDetails;
+                //logic to add messages to process order,.
             }
             catch (Exception ex)
             {
