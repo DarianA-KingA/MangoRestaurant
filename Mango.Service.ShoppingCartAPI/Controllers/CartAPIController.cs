@@ -1,4 +1,5 @@
-﻿using Mango.Service.ShoppingCartAPI.Messages;
+﻿using Mango.MessageBus;
+using Mango.Service.ShoppingCartAPI.Messages;
 using Mango.Service.ShoppingCartAPI.Models.DTO;
 using Mango.Service.ShoppingCartAPI.Repository;
 using Mango.Services.ShoppingCartAPi.Models.DTO;
@@ -12,11 +13,15 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepository;
+        private readonly ICouponReposiroty _couponRepository;
+        private readonly IMessageBus _messageBus;
         protected ResponseDto _response;
-        public CartController(ICartRepository cartRepository)
+        public CartController(ICartRepository cartRepository, IMessageBus messageBus, ICouponReposiroty couponReposiroty)
         {
             _cartRepository = cartRepository;
             this._response = new ResponseDto();
+            _messageBus = messageBus;
+            _couponRepository = couponReposiroty;
         }
 
         [HttpGet("GetCart/{userId}")]
@@ -130,8 +135,20 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
                 {
                     return BadRequest();
                 }
+                if (!string.IsNullOrEmpty(checkoutHeader.CouponCode))
+                {
+                    CouponDto coupon = await _couponRepository.GetCoupon(checkoutHeader.CouponCode);
+                    if (checkoutHeader.DiscountTotal != coupon.DiscountAmount)
+                    {
+                        _response.IsSuccess=false;
+                        _response.ErrorMessages = new List<string>() {"Coupon Price has changed, please confirm" };
+                        _response.DisplayMessage = "Coupon Price has changed, please confirm";
+                        return _response;
+                    }
+                }
                 checkoutHeader.CartDetails = cartDto.CartDetails;
-                //logic to add messages to process order,.
+                //logic to add messages to process order.
+                await _messageBus.PublishMessage(checkoutHeader, "checkoutmessagetopic");
             }
             catch (Exception ex)
             {

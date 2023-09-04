@@ -1,35 +1,32 @@
 using AutoMapper;
-using Mango.MessageBus;
-using Mango.Service.ShoppingCartAPI;
-using Mango.Service.ShoppingCartAPI.Context;
-using Mango.Service.ShoppingCartAPI.Repository;
+using Mango.Service.OrderAPI.Context;
+using Mango.Service.OrderAPI.Extension;
+using Mango.Service.OrderAPI.Messaging;
+using Mango.Service.OrderAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 //1.add dbContext
 builder.Services.AddDbContext<ApplicationContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 //2.add automapper
-IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-builder.Services.AddSingleton(mapper);
+//IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+//builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //3.dependecy injection
-builder.Services.AddScoped<ICartRepository, CartRepository>();
-builder.Services.AddScoped<ICouponReposiroty, CouponReposiroty>();
-builder.Services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
 
+var optionBuilder = new DbContextOptionsBuilder<ApplicationContext>();
+optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSingleton(new OrderRepository(optionBuilder.Options));
+builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 //anything
 
 builder.Services.AddControllers();
-//setting Http client base url
-builder.Services.AddHttpClient<ICouponReposiroty, CouponReposiroty>(u => u.BaseAddress = 
-new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
-
 
 //4.adding authentication with json bearer
 builder.Services.AddAuthentication("Bearer")
@@ -53,7 +50,7 @@ builder.Services.AddAuthorization(options =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-//6.modigy swaager
+//6.modify swaager
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
@@ -85,7 +82,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -101,5 +97,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UserAzureServiceBusConsumer();
 
 app.Run();
