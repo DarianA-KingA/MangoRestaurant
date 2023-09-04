@@ -1,4 +1,5 @@
 using AutoMapper;
+using Mango.MessageBus;
 using Mango.Service.ShoppingCartAPI;
 using Mango.Service.ShoppingCartAPI.Context;
 using Mango.Service.ShoppingCartAPI.Repository;
@@ -19,9 +20,16 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //3.dependecy injection
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICouponReposiroty, CouponReposiroty>();
+builder.Services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
+
 //anything
 
 builder.Services.AddControllers();
+//setting Http client base url
+builder.Services.AddHttpClient<ICouponReposiroty, CouponReposiroty>(u => u.BaseAddress = 
+new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
+
 
 //4.adding authentication with json bearer
 builder.Services.AddAuthentication("Bearer")

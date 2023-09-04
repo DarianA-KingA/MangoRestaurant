@@ -9,13 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 //1.http client to consume api
 builder.Services.AddHttpClient<IProductService, ProductService>();
 builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddHttpClient<ICouponService, CouponService>();
 //2. define the url from the api
 SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
 SD.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:ShoppingCartAPI"];
+SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
+
 
 //3.depency injection for productService
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 
 builder.Services.AddControllersWithViews();
